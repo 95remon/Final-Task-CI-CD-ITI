@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "remonlouis-tf-state-gcp-finaltask"
+    bucket = "remonlouis-tf-state-finaltask"
     prefix = "terraform/state"
   }
   required_providers {

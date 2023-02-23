@@ -30,15 +30,15 @@ resource "google_compute_router_nat" "nat" {
   router = google_compute_router.router.name
   region = "us-central1"
 
-  source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
-  nat_ip_allocate_option             = "MANUAL_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+  nat_ip_allocate_option             = "AUTO_ONLY"
 
-  subnetwork {
-    name                    = google_compute_subnetwork.management.id
-    source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
-  }
+  # subnetwork {
+  #   name                    = google_compute_subnetwork.management.id
+  #   source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
+  # }
 
-  nat_ips = [google_compute_address.nat.self_link]
+  # nat_ips = [google_compute_address.nat.self_link]
 }
 
 resource "google_compute_address" "nat" {
@@ -59,7 +59,8 @@ resource "google_compute_firewall" "ssh" {
     ports    = ["22"]
   }
 
-  source_ranges = ["0.0.0.0/0"]
+  direction     = "INGRESS"
+  source_ranges = ["35.235.240.0/20"]
 }
 
 resource "google_compute_firewall" "http" {
@@ -71,5 +72,6 @@ resource "google_compute_firewall" "http" {
     ports    = ["80"]
   }
 
-  source_ranges = ["0.0.0.0/0"]
+  direction     = "INGRESS"
+  source_ranges = ["35.235.240.0/20"]
 }
