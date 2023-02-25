@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: docker-install
+spec:
+  selector:
+    matchLabels:
+      app: docker-install
+  template:
+    metadata:
+      labels:
+        app: docker-install
+    spec:
+      containers:
+      - name: docker-install
+        image: docker:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            set -e
+            apk add docker
+            chmod -R 777 /var/run/docker*
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: docker-socket
+          mountPath: /var/run/
+      volumes:
+      - name: docker-socket
+        hostPath:
+          path: /var/run/
